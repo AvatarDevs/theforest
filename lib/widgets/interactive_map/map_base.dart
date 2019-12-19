@@ -1,65 +1,68 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
+import 'dart:ui' as ui;
+import '../../models/map_item.dart';
+import '../custom_painters/map_item_painter.dart';
+import '../custom_painters/photo_painter.dart';
 
 class PannableMapBase extends StatelessWidget {
   //implement streambuilder
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        child: PhotoView.customChild(
-            child: Stack(
-              children: [
-                //CustomPaint(painter: PhotoPainter(),child: Container(width:4096,height:4096),)
-                ...generateWidgets(50, Size(4096, 4096)),
-                //Image.asset("assets/forestmap.jpg")
-              ],
-            ),
-            childSize: Size(4096, 4096),
-            initialScale: PhotoViewComputedScale.covered * 1,
-            backgroundDecoration: BoxDecoration(color: Colors.transparent),
-            minScale: PhotoViewComputedScale.contained * 1.2,
-            maxScale: PhotoViewComputedScale.covered * 3,
-          ),
+      child: FutureBuilder(
+        future: getImage("assets/forestmap.jpg"),
+        builder: (c, AsyncSnapshot<ui.Image> snapshot) => snapshot.hasData
+            ? PhotoView.customChild(
+                child: Stack(
+                  children: [
+                    CustomPaint(
+                      painter: PhotoPainter(snapshot.data),
+                      // child: Container(width: 4096, height: 4096),
+                    ),
+                    FutureBuilder(
+                      future: getItems(50),
+                      builder: (c, s) => s.hasData
+                          ? CustomPaint(
+                              painter: MapItemPainter(s.data),
+                              // child: Container(width: 4096, height: 4096),
+                            )
+                          : CircularProgressIndicator(),
+                    )
+                  ],
+                ),
+                childSize: Size(4096, 4096),
+                initialScale: PhotoViewComputedScale.covered * 1,
+                backgroundDecoration: BoxDecoration(color: Colors.transparent),
+                minScale: PhotoViewComputedScale.contained * 1.2,
+                maxScale: PhotoViewComputedScale.covered * 3,
+              )
+            : CircularProgressIndicator(),
       ),
     );
   }
-}
 
-List<Widget> generateWidgets(int count, Size size) {
-  print(size);
-  return List.generate(count, (count) {
-    double top = (Random().nextDouble() * size.height).roundToDouble();
-    double left = (Random().nextDouble() * size.width).roundToDouble();
-    return Positioned(
-      top: top,
-      left: left,
-      child: InkWell(
-        splashColor: Colors.blue,
-        onTap: () {
-          print("$count pressed at $top from the top and $left from the left");
-        },
-        child: Container(color: Colors.green, child: Text(count.toString())),
-      ),
-    );
-  });
-}
-
-class PhotoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
-    print(size);
-
-    canvas.drawCircle(
-        Offset(200, size.height / 2), 25, Paint()..color = Colors.black);
+  Future<ui.Image> getImage(String asset) async {
+    final ByteData data = await rootBundle.load(asset);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return fi.image;
   }
 
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
-    throw UnimplementedError();
+  Future<List<MapItemModel>> getItems(int count) async {
+    return await List.generate(
+      count,
+      (count) => MapItemModel(
+        offset: Offset(
+          Random().nextDouble() * 4096,
+          Random().nextDouble() * 4096,
+        ),
+      ),
+    );
   }
 }
