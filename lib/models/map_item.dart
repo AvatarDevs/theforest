@@ -13,7 +13,7 @@ class MapItemModel {
   final String locationDescription;
 
   ///the type of item(Cave,Gear,Collectable) used when filtering to either make visible or invisible
-  final MapItemType type;
+  //final MapItemType type;
 
   ///Whether or not the item is visible on the map if the user filters a specific [MapItemType] on or off
   final bool isVisible;
@@ -27,6 +27,14 @@ class MapItemModel {
     this.isVisible,
     this.offset,
     this.locationDescription,
-    this.type,
+   // this.type,
   });
+
+  MapItemModel.fromJSON(Map<String, dynamic> json)
+      : this.title = json["title"],
+        this.decription = json["description"],
+        this.locationDescription = json["locationDescription"],
+        //this.type = json["type"],
+        this.isVisible = true,
+        this.offset = Offset(json["x"].toDouble(), json["y"].toDouble());
 }
