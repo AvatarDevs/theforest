@@ -6,33 +6,36 @@ import '../../models/map_item.dart';
 class MapItemPainter extends CustomPainter {
   //consider passing in multiple lists of items - use the ToggleButtons to change whether or not to pass in a particular list
   final List<List<MapItemModel>> itemList;
-  MapItemPainter(this.itemList);
+  List<bool> selected;
+  MapItemPainter(this.itemList, this.selected);
 
   @override
   void paint(Canvas canvas, Size size) {
     for (int i = 0; i < itemList.length; i++) {
-      for (int j = 0; j < itemList[i].length; j++) {
-        MapItemModel model = itemList[i][j];
-        canvas.save();
-        canvas.translate(model.offset.dx, model.offset.dy);
-        canvas.drawCircle(
-          Offset.zero,
-          50,
-          getPaintFromType(model.type),
-        );
+      if (!selected[i]) {
+        for (int j = 0; j < itemList[i].length; j++) {
+          MapItemModel model = itemList[i][j];
+          canvas.save();
+          canvas.translate(model.offset.dx, model.offset.dy);
+          canvas.drawCircle(
+            Offset.zero,
+            50,
+            getPaintFromType(model.type),
+          );
 
-        canvas.drawRRect(
-            RRect.fromRectAndRadius(
-              Rect.fromLTWH(-80, 30, 175, 80),
-              Radius.circular(20),
-            ),
-            Paint()..color = Colors.red);
+          canvas.drawRRect(
+              RRect.fromRectAndRadius(
+                Rect.fromLTWH(-80, 30, 175, 80),
+                Radius.circular(20),
+              ),
+              Paint()..color = Colors.red);
 
-        paintText(canvas, size, model.title);
+          paintText(canvas, size, model.title);
 
-        // canvas.drawParagraph(paragraph, offset)
+          // canvas.drawParagraph(paragraph, offset)
 
-        canvas.restore();
+          canvas.restore();
+        }
       }
     }
   }
@@ -64,21 +67,19 @@ class MapItemPainter extends CustomPainter {
   }
 
   paintText(Canvas canvas, Size size, String text) {
-     final textStyle = ui.TextStyle(
-    color: Colors.black,
-    fontSize: 30,
-  );
-  final paragraphStyle = ui.ParagraphStyle(
-    textDirection: TextDirection.ltr,
-    textAlign: TextAlign.center
-  );
-  final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
-    ..pushStyle(textStyle)
-    ..addText(text);
-  final constraints = ui.ParagraphConstraints(width: 175);
-  final paragraph = paragraphBuilder.build();
-  paragraph.layout(constraints);
-  final offset = Offset(-80, 25);
-  canvas.drawParagraph(paragraph, offset);
+    final textStyle = ui.TextStyle(
+      color: Colors.black,
+      fontSize: 30,
+    );
+    final paragraphStyle = ui.ParagraphStyle(
+        textDirection: TextDirection.ltr, textAlign: TextAlign.center);
+    final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
+      ..pushStyle(textStyle)
+      ..addText(text);
+    final constraints = ui.ParagraphConstraints(width: 175);
+    final paragraph = paragraphBuilder.build();
+    paragraph.layout(constraints);
+    final offset = Offset(-80, 25);
+    canvas.drawParagraph(paragraph, offset);
   }
 }
