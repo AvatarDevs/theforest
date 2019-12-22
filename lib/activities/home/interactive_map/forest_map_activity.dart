@@ -30,31 +30,30 @@ class _ForestMapActivityState extends State<ForestMapActivity> {
               Positioned(
                 top: 40,
                 left: 25,
-                child: RepaintBoundary(
-                  child: AnimatedOpacity(
-                    opacity: showMenuItems ? 1.0 : 0.0,
-                    duration: Duration(milliseconds: 250),
-                    child: IgnorePointer(
-                      ignoring: !showMenuItems,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.arrow_back,
-                            ),
-                            color: Colors.white38,
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
+                child: AnimatedOpacity(
+                  opacity: showMenuItems ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 250),
+                  child: IgnorePointer(
+                    ignoring: !showMenuItems,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
                           ),
-                          MapToggleButtons()
-                        ],
-                      ),
+                          color: Colors.white38,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        MapToggleButtons()
+                      ],
                     ),
                   ),
                 ),
               )
+              
             ],
           ),
         ),
