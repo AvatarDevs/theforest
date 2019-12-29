@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theforest/locator.dart';
+import 'package:theforest/models/map_item.dart';
 import 'package:theforest/viewmodels/map_activity_vm.dart';
+import 'package:theforest/widgets/interactive_map/item_view/item_view.dart';
 import 'package:theforest/widgets/toggle_buttons/toggle_button.dart';
 
 import '../../../widgets/interactive_map/map_base.dart';
@@ -13,6 +15,7 @@ class ForestMapActivity extends StatefulWidget {
 
 class _ForestMapActivityState extends State<ForestMapActivity> {
   bool showMenuItems = true;
+  GlobalKey scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Provider<MapActivityViewModel>(
@@ -24,6 +27,7 @@ class _ForestMapActivityState extends State<ForestMapActivity> {
           });
         },
         child: Scaffold(
+          key: scaffoldKey,
           body: Stack(
             children: <Widget>[
               PannableMapBase(),
@@ -60,4 +64,5 @@ class _ForestMapActivityState extends State<ForestMapActivity> {
       ),
     );
   }
+
 }

@@ -24,7 +24,7 @@ class ItemApi {
     }
   }
 
-  Future<List<List<MapItemModel>>> fetch2dList() async {
+  Future<List<List<MapItemModel>>>  fetch2dList() async {
     print("fetch1");
     try {
       print("fetch2");

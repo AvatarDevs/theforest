@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:theforest/enums/item_type.dart';
 import 'dart:ui' as ui;
@@ -7,34 +9,33 @@ class MapItemPainter extends CustomPainter {
   //consider passing in multiple lists of items - use the ToggleButtons to change whether or not to pass in a particular list
   final List<List<MapItemModel>> itemList;
   List<bool> selected;
-  MapItemPainter(this.itemList, this.selected);
+
+  Offset tappedOffset;
+  final List<List<RRect>> rects;
+  
+  MapItemPainter(this.itemList, this.selected,
+      {this.tappedOffset, this.rects});
 
   @override
   void paint(Canvas canvas, Size size) {
+    double boxwidth = 200;
+    double boxHeight = 80;
+    double triangleLength = 20;
+
     for (int i = 0; i < itemList.length; i++) {
       if (!selected[i]) {
         for (int j = 0; j < itemList[i].length; j++) {
           MapItemModel model = itemList[i][j];
-          canvas.save();
-          canvas.translate(model.offset.dx, model.offset.dy);
-          canvas.drawCircle(
-            Offset.zero,
-            50,
-            getPaintFromType(model.type),
-          );
 
-          canvas.drawRRect(
-              RRect.fromRectAndRadius(
-                Rect.fromLTWH(-80, 30, 175, 80),
-                Radius.circular(20),
-              ),
-              Paint()..color = Colors.red);
+         
+              
+          drawTrianglePath(canvas, model);
+          canvas.drawCircle(model.offset, 5, Paint());
+          canvas.drawRRect(rects[i][j], getPaintFromType(model.type));
 
-          paintText(canvas, size, model.title);
-
-          // canvas.drawParagraph(paragraph, offset)
-
-          canvas.restore();
+          paintText(canvas, size, model.title, model.offset);
+          //print(rrect.top);
+          
         }
       }
     }
@@ -66,20 +67,36 @@ class MapItemPainter extends CustomPainter {
     }
   }
 
-  paintText(Canvas canvas, Size size, String text) {
+  paintText(Canvas canvas, Size size, String text, Offset moffset) {
     final textStyle = ui.TextStyle(
-      color: Colors.black,
-      fontSize: 30,
+      color: Colors.white,
+      fontSize: 20,
     );
     final paragraphStyle = ui.ParagraphStyle(
-        textDirection: TextDirection.ltr, textAlign: TextAlign.center);
+        textDirection: TextDirection.ltr,
+        textAlign: TextAlign.start,
+        maxLines: 1,
+        ellipsis: "..");
     final paragraphBuilder = ui.ParagraphBuilder(paragraphStyle)
       ..pushStyle(textStyle)
       ..addText(text);
-    final constraints = ui.ParagraphConstraints(width: 175);
+    final constraints = ui.ParagraphConstraints(width: 130);
     final paragraph = paragraphBuilder.build();
     paragraph.layout(constraints);
-    final offset = Offset(-80, 25);
+    final offset = Offset(25 + moffset.dx, -65 + moffset.dy);
     canvas.drawParagraph(paragraph, offset);
+  }
+
+  drawTrianglePath(Canvas canvas, var model) {
+    Path trianglePath = Path();
+    double triangleLength = 20;
+
+    trianglePath.moveTo(model.offset.dx, model.offset.dy);
+    trianglePath.lineTo(
+        -triangleLength + model.offset.dx, -20 + model.offset.dy);
+    trianglePath.lineTo(
+        20 + model.offset.dx, -triangleLength + model.offset.dy);
+    trianglePath.close();
+    canvas.drawPath(trianglePath, getPaintFromType(model.type));
   }
 }
