@@ -10,59 +10,63 @@ import '../../../widgets/interactive_map/map_base.dart';
 
 class ForestMapActivity extends StatefulWidget {
   @override
-  _ForestMapActivityState createState() => _ForestMapActivityState();
+  ForestMapActivityState createState() => ForestMapActivityState();
 }
 
-class _ForestMapActivityState extends State<ForestMapActivity> {
+class ForestMapActivityState extends State<ForestMapActivity> {
   bool showMenuItems = true;
-  GlobalKey scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Provider<MapActivityViewModel>(
       create: (context) => locator<MapActivityViewModel>(),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            showMenuItems = !showMenuItems;
-          });
-        },
-        child: Scaffold(
-          key: scaffoldKey,
-          body: Stack(
-            children: <Widget>[
-              PannableMapBase(),
-              Positioned(
-                top: 40,
-                left: 25,
-                child: AnimatedOpacity(
-                  opacity: showMenuItems ? 1.0 : 0.0,
-                  duration: Duration(milliseconds: 250),
-                  child: IgnorePointer(
-                    ignoring: !showMenuItems,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.arrow_back,
-                          ),
-                          color: Colors.white38,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        MapToggleButtons()
-                      ],
-                    ),
-                  ),
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            PannableMapBase(),
+            Positioned(
+              top: 40,
+              left: 25,
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
                 ),
-              )
-              
-            ],
-          ),
+                color: Colors.white38,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 50),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.remove_red_eye),
+                      onPressed: () {
+                        setState(() {
+                          showMenuItems = !showMenuItems;
+                        });
+                      },
+                    ),
+                    AnimatedOpacity(
+                      opacity: showMenuItems ? 1.0 : 0.0,
+                      duration: Duration(milliseconds: 250),
+                      child: IgnorePointer(
+                        ignoring: !showMenuItems,
+                        child: MapToggleButtons(),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
-
 }

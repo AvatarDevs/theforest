@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:theforest/activities/home/interactive_map/forest_map_activity.dart';
 import 'package:theforest/http/item_api.dart';
 import 'package:theforest/utils/transform/gesture_transformable.dart';
 import 'package:theforest/utils/type_to_image.dart';
