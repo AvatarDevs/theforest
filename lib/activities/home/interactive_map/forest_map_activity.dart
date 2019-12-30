@@ -31,7 +31,7 @@ class ForestMapActivityState extends State<ForestMapActivity> {
                 icon: Icon(
                   Icons.arrow_back,
                 ),
-                color: Colors.white38,
+                color: Colors.black87,
                 onPressed: () {
                   Navigator.pop(context);
                 },

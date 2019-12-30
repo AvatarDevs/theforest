@@ -107,18 +107,18 @@ class _PannableMapBaseState extends State<PannableMapBase> {
     /*  setState(() {
       _board = _board.copyWithSelected(boardPoint);
     }); */
-pointToModel(scenePoint);
-   
+    pointToModel(scenePoint);
   }
 
-   pointToModel(Offset scenePoint) {
+  pointToModel(Offset scenePoint) {
     MapItemModel item;
     for (int i = 0; i < models.length; i++) {
       for (int j = 0; j < models[i].length; j++) {
         if (rectList[i][j].contains(scenePoint)) {
           item = models[i][j];
           print(item.title);
-          showModalBottomSheet(context: context,builder: (c)=>ItemView(model:item));
+          showModalBottomSheet(
+              context: context, builder: (c) => ItemView(model: item));
         }
       }
     }
