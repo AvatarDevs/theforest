@@ -21,12 +21,12 @@ class ToggleButtonItem extends StatelessWidget {
                     fit: BoxFit.contain,
                     width: 25,
                     height: 25,
-                    color: Colors.yellow,filterQuality: FilterQuality.high,
+                    color: Colors.white38,filterQuality: FilterQuality.high,
                   ),
                   Text(
                     title,
                     style: TextStyle(
-                      color: Colors.black87,
+                      color: Colors.white38,
                     ),
                   )
                 ],

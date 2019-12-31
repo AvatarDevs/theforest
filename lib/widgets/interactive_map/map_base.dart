@@ -118,7 +118,10 @@ class _PannableMapBaseState extends State<PannableMapBase> {
           item = models[i][j];
           print(item.title);
           showModalBottomSheet(
-              context: context, builder: (c) => ItemView(model: item));
+              context: context,
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              builder: (c) => ItemView(model: item));
         }
       }
     }

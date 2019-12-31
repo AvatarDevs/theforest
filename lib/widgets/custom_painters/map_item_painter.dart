@@ -29,8 +29,9 @@ class MapItemPainter extends CustomPainter {
 
          
               
-          drawTrianglePath(canvas, model);
+          
           canvas.drawCircle(model.offset, 5, Paint());
+          drawTrianglePath(canvas, model);
           canvas.drawRRect(rects[i][j], getPaintFromType(model.type));
 
           paintText(canvas, size, model.title, model.offset);

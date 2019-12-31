@@ -79,7 +79,7 @@ class _HomeGameChoicesState extends State<HomeGameChoices> with SingleTickerProv
                 child: Image.asset(
                   "assets/sotflogo.png",
                   fit: BoxFit.cover,
-                  width: 220,
+                  width: 175,
                   height: 190,
                 ),
               ),
