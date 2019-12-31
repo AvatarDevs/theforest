@@ -21,50 +21,59 @@ class ForestMapActivityState extends State<ForestMapActivity> {
     return Provider<MapActivityViewModel>(
       create: (context) => locator<MapActivityViewModel>(),
       child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            PannableMapBase(),
-            Positioned(
-              top: 40,
-              left: 25,
-              child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/caverock.jpg"), fit: BoxFit.cover),
+          ),
+          child: Stack(
+            children: <Widget>[
+              PannableMapBase(),
+              Positioned(
+                top: 40,
+                left: 25,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                  ),
+                  color: Colors.yellow,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                color: Colors.black87,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 50),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.remove_red_eye),
-                      onPressed: () {
-                        setState(() {
-                          showMenuItems = !showMenuItems;
-                        });
-                      },
-                    ),
-                    AnimatedOpacity(
-                      opacity: showMenuItems ? 1.0 : 0.0,
-                      duration: Duration(milliseconds: 250),
-                      child: IgnorePointer(
-                        ignoring: !showMenuItems,
-                        child: MapToggleButtons(),
+              Padding(
+                padding: EdgeInsets.only(bottom: 50),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.remove_red_eye,
+                          color: Colors.yellow,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            showMenuItems = !showMenuItems;
+                          });
+                        },
                       ),
-                    )
-                  ],
+                      AnimatedOpacity(
+                        opacity: showMenuItems ? 1.0 : 0.0,
+                        duration: Duration(milliseconds: 250),
+                        child: IgnorePointer(
+                          ignoring: !showMenuItems,
+                          child: MapToggleButtons(),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

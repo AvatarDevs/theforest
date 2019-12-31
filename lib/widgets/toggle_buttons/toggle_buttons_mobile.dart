@@ -18,64 +18,16 @@ class _ToggleButtonsMobileState extends State<ToggleButtonsMobile> {
       ),
       children: <Widget>[
         ToggleButtonItem(
-          child: Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/cave.png',
-                    fit: BoxFit.contain,
-                    width: 25,
-                    height: 25,
-                  ),
-                  Text(
-                    "caves",
-                    style: TextStyle(
-                      color: Colors.black87,
-                    ),
-                  )
-                ],
-              )),
+          title:"caves",
+          asset: "assets/cave.png",
         ),
         ToggleButtonItem(
-          child:Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/axe.png',
-                    fit: BoxFit.contain,
-                    width: 25,
-                    height: 25,
-                  ),
-                  Text(
-                    "gear",
-                    style: TextStyle(
-                      color: Colors.black87,
-                    ),
-                  )
-                ],
-              )),
+          title:"gear",
+          asset: "assets/axe.png",
         ),
         ToggleButtonItem(
-          child: Padding(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                children: <Widget>[
-                  Image.asset(
-                    'assets/mglass.png',
-                    fit: BoxFit.contain,
-                    width: 25,
-                    height: 25,
-                  ),
-                  Text(
-                    "items",
-                    style: TextStyle(
-                      color: Colors.black87,
-                    ),
-                  )
-                ],
-              )),
+          title:"items",
+          asset: "assets/mglass.png",
         ),
       ],
       isSelected: widget._selected,
