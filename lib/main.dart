@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:theforest/activities/home/home.dart';
 import 'package:theforest/locator.dart';
+import 'package:theforest/tf/ui/pages/home/home_page.dart';
 
 import 'themes/ui_theme.dart';
 

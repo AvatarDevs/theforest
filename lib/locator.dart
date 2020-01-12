@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:theforest/viewmodels/map_activity_vm.dart';
+import 'package:theforest/tf/viewmodels/map_activity_vm.dart';
+
 
 GetIt locator = GetIt.instance;
 
