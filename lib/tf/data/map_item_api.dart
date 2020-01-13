@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import '../models/map_item.dart';
 import 'package:http/http.dart' as http;
@@ -17,10 +18,8 @@ class MapItemApi {
       }
 
       return temp;
-    } catch (e) {
-      throw Exception(
-        e,
-      );
+    } on SocketException {
+      throw Exception("Check your internet");
     }
   }
 
