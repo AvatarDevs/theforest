@@ -19,10 +19,6 @@ class ForestMapActivityState extends State<ForestMapActivity> {
       create: (context) => locator<MapActivityViewModel>(),
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/caverock.jpg"), fit: BoxFit.cover),
-          ),
           child: Stack(
             children: <Widget>[
               PannableMapBase(),
