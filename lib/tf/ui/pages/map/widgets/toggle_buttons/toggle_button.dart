@@ -8,11 +8,9 @@ class MapToggleButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MapActivityViewModel>(
-      builder: (context,model,child)=> ScreenTypeLayout(
+      builder: (context, model, child) => ScreenTypeLayout(
         mobile: ToggleButtonsMobile(model.selected),
-        
       ),
-          
     );
   }
 }

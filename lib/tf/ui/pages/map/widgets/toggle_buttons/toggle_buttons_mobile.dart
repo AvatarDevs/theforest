@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:theforest/tf/ui/pages/map/widgets/toggle_buttons/toggle_button_item.dart';
+
 class ToggleButtonsMobile extends StatefulWidget {
   List<bool> _selected;
   ToggleButtonsMobile(this._selected);
@@ -17,15 +18,15 @@ class _ToggleButtonsMobileState extends State<ToggleButtonsMobile> {
       ),
       children: <Widget>[
         ToggleButtonItem(
-          title:"caves",
+          title: "caves",
           asset: "assets/cave.png",
         ),
         ToggleButtonItem(
-          title:"gear",
+          title: "gear",
           asset: "assets/axe.png",
         ),
         ToggleButtonItem(
-          title:"items",
+          title: "items",
           asset: "assets/mglass.png",
         ),
       ],
