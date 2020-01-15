@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:theforest/shared/responsive/screen_type_layout.dart';
 import 'package:theforest/shared/responsive/size_restriction.dart';
-import 'package:theforest/tf/ui/pages/home/home_choice.dart';
+import 'package:theforest/tf/ui/pages/home/widgets/home_choice.dart';
 
 class Home extends StatelessWidget {
   @override

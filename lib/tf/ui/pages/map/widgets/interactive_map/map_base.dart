@@ -5,8 +5,10 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theforest/shared/utils/transform/gesture_transformable.dart';
-import 'package:theforest/shared/utils/type_to_image.dart';
+
+import 'package:theforest/tf/blocs/map_image_bloc.dart';
 import 'package:theforest/tf/blocs/map_item_bloc.dart';
+import 'package:theforest/tf/data/api_response.dart';
 import 'dart:ui' as ui;
 
 import 'package:theforest/tf/models/map_item.dart';
@@ -28,65 +30,84 @@ class _PannableMapBaseState extends State<PannableMapBase> {
   Offset tappedOffset;
   List<List<MapItemModel>> models;
   List<List<RRect>> rectList = [[], [], []];
-  MapItemBloc _bloc;
+  MapItemBloc _itemBloc;
+  MapImageBloc _imageBloc;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     tappedOffset = Offset.zero;
-    _bloc = MapItemBloc();
+    _itemBloc = MapItemBloc();
+    _imageBloc = MapImageBloc();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("building");
     return Consumer<MapActivityViewModel>(
-      builder: (context, model, child) => Center(
-          child: SafeArea(
+      child: StreamBuilder(
+        stream: _imageBloc.stream,
+        initialData: Response.loading('loading image'),
+        builder: (c, s) {
+          switch (s.data.status) {
+            case Status.LOADING:
+              return CircularProgressIndicator();
+              break;
+            case Status.COMPLETED:
+              print("building image");
+              return CustomPaint(
+                painter: PhotoPainter(s.data.data),
+              );
+              break;
+            case Status.ERROR:
+              return AlertDialog(
+                title: Text("Error"),
+              );
+              break;
+          }
+        },
+      ),
+      builder: (context, model, child) => SafeArea(
         child: SizedBox(
           width: 4096,
           height: 4096,
           child: LayoutBuilder(builder: (c, constraints) {
             final Size size = Size(constraints.maxWidth, constraints.maxHeight);
-            print("building");
+            print("building2");
 
             return GestureTransformable(
               size: size,
               child: Stack(
                 children: [
-                  FutureBuilder(
-                    future: ItemTypeToImage.getImageFromString(
-                        "assets/forestmap.jpg"),
-                    builder: (c, AsyncSnapshot<ui.Image> snapshot) =>
-                        snapshot.hasData
-                            ? CustomPaint(
-                                painter: PhotoPainter(snapshot.data),
-                                // child: Container(width: 4096, height: 4096),
-                              )
-                            : Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                  ),
-                  StreamBuilder(
-                      stream: _bloc.stream,
-                      initialData: [],
-                      builder: (c, s) {
-                        if (s.hasData) {
-                          if (s.data.length > 0) {
-                            this.models = s.data;
-                            this.rectList = createRectsFromModel();
-                            return CustomPaint(
-                              painter: MapItemPainter(
-                                s.data,
-                                model.selected,
-                                tappedOffset: tappedOffset,
-                                rects: rectList,
-                              ),
-                            );
-                          } else {
+                  child,
+                  StreamBuilder<Response<dynamic>>(
+                      stream: _itemBloc.stream,
+                      initialData: Response.loading("waiting"),
+                      builder: (c, AsyncSnapshot<Response<dynamic>> s) {
+                        switch (s.data.status) {
+                          case Status.LOADING:
                             return CircularProgressIndicator();
-                          }
-                        } else {
-                          return CircularProgressIndicator();
+                            break;
+                          case Status.COMPLETED:
+                            this.models =
+                                s.data.data as List<List<MapItemModel>>;
+                            if (models.length > 0) {
+                              this.rectList = createRectsFromModel();
+                              return CustomPaint(
+                                painter: MapItemPainter(
+                                  models,
+                                  model.selected,
+                                  tappedOffset: tappedOffset,
+                                  rects: rectList,
+                                ),
+                              );
+                            }
+                            break;
+                          case Status.ERROR:
+                            return AlertDialog(
+                              title: Text("Error"),
+                            );
+                            break;
                         }
                       }),
                 ],
@@ -104,14 +125,15 @@ class _PannableMapBaseState extends State<PannableMapBase> {
             );
           }),
         ),
-      )),
+      ),
     );
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    _bloc.dispose();
+    _itemBloc.dispose();
+    _imageBloc.dispose();
     super.dispose();
   }
 

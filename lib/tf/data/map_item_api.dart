@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:theforest/tf/data/api_provider.dart';
+
 import '../models/map_item.dart';
 import 'package:http/http.dart' as http;
 
-class MapItemApi {
+class MapItemApi extends ApiProvider{
   static const String urlBase ="https://sonsoftheforest.firebaseio.com/flamelink/environments/production/content/";
+ 
  
   Future<List<MapItemModel>> fetchItems(String itemType) async {
     try {

@@ -3,7 +3,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/services.dart';
 import 'package:theforest/tf/models/map_item.dart';
 
-class ItemTypeToImage {
+
+class MapImageProvider {
   static Future<ui.Image> getImageFromItemType(MapItemType type) async {
     switch (type) {
       case MapItemType.Cave:

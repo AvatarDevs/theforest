@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:theforest/locator.dart';
-import 'package:theforest/tf/ui/pages/home/widgets/toggle_buttons/toggle_button.dart';
 import 'package:theforest/tf/ui/pages/map/widgets/interactive_map/map_base.dart';
+import 'package:theforest/tf/ui/pages/map/widgets/toggle_buttons/toggle_button.dart';
 import 'package:theforest/tf/viewmodels/map_activity_vm.dart';
 
 class ForestMapActivity extends StatefulWidget {

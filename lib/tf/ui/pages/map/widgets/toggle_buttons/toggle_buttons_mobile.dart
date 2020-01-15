@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:theforest/tf/ui/pages/home/widgets/toggle_buttons/toggle_button_item.dart';
-
+import 'package:theforest/tf/ui/pages/map/widgets/toggle_buttons/toggle_button_item.dart';
 class ToggleButtonsMobile extends StatefulWidget {
   List<bool> _selected;
   ToggleButtonsMobile(this._selected);
