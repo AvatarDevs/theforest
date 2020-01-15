@@ -3,11 +3,13 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:theforest/shared/utils/transform/gesture_transformable.dart';
 
 import 'package:theforest/tf/blocs/map_image_bloc.dart';
 import 'package:theforest/tf/blocs/map_item_bloc.dart';
+import 'package:theforest/tf/blocs/map_item_bloc/bloc.dart';
 import 'package:theforest/tf/data/api_response.dart';
 import 'dart:ui' as ui;
 
@@ -30,15 +32,15 @@ class _PannableMapBaseState extends State<PannableMapBase> {
   Offset tappedOffset;
   List<List<MapItemModel>> models;
   List<List<RRect>> rectList = [[], [], []];
-  MapItemBloc _itemBloc;
+  final MapItemBloc _itemBloc = MapItemBloc();
+  final ItemBloc _libItemBLoc = ItemBloc();
   MapImageBloc _imageBloc;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    tappedOffset = Offset.zero;
-    _itemBloc = MapItemBloc();
     _imageBloc = MapImageBloc();
+    tappedOffset = Offset.zero;
+    _libItemBLoc.add(GetItemsEvent());
   }
 
   @override
@@ -50,16 +52,16 @@ class _PannableMapBaseState extends State<PannableMapBase> {
         initialData: Response.loading('loading image'),
         builder: (c, s) {
           switch (s.data.status) {
-            case Status.LOADING:
+            case ResponseStatus.LOADING:
               return CircularProgressIndicator();
               break;
-            case Status.COMPLETED:
+            case ResponseStatus.COMPLETED:
               print("building image");
               return CustomPaint(
                 painter: PhotoPainter(s.data.data),
               );
               break;
-            case Status.ERROR:
+            case ResponseStatus.ERROR:
               return AlertDialog(
                 title: Text("Error"),
               );
@@ -80,36 +82,31 @@ class _PannableMapBaseState extends State<PannableMapBase> {
               child: Stack(
                 children: [
                   child,
-                  StreamBuilder<Response<dynamic>>(
-                      stream: _itemBloc.stream,
-                      initialData: Response.loading("waiting"),
-                      builder: (c, AsyncSnapshot<Response<dynamic>> s) {
-                        switch (s.data.status) {
-                          case Status.LOADING:
-                            return CircularProgressIndicator();
-                            break;
-                          case Status.COMPLETED:
-                            this.models =
-                                s.data.data as List<List<MapItemModel>>;
-                            if (models.length > 0) {
-                              this.rectList = createRectsFromModel();
-                              return CustomPaint(
-                                painter: MapItemPainter(
-                                  models,
-                                  model.selected,
-                                  tappedOffset: tappedOffset,
-                                  rects: rectList,
-                                ),
-                              );
-                            }
-                            break;
-                          case Status.ERROR:
-                            return AlertDialog(
-                              title: Text("Error"),
-                            );
-                            break;
+                  BlocBuilder(
+                    bloc: _libItemBLoc,
+                    builder: (context, ItemState state) {
+                      if (state is FetchedItemState) {
+                        this.models = state.items;
+                        if (models.length > 0) {
+                          this.rectList = createRectsFromModel();
+                          return CustomPaint(
+                            painter: MapItemPainter(
+                              models,
+                              model.selected,
+                              tappedOffset: tappedOffset,
+                              rects: rectList,
+                            ),
+                          );
+                        } else {
+                          return AlertDialog(
+                            title: Text("NO ITEMS FOUND"),
+                          );
                         }
-                      }),
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
+                  )
                 ],
               ),
               boundaryRect: Rect.fromLTWH(
@@ -134,6 +131,7 @@ class _PannableMapBaseState extends State<PannableMapBase> {
     // TODO: implement dispose
     _itemBloc.dispose();
     _imageBloc.dispose();
+    _libItemBLoc.close();
     super.dispose();
   }
 
