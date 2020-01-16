@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:theforest/tf/data/api_response.dart';
 import 'package:theforest/tf/repositories/map_image_repository.dart';
 
+///traditional bloc no library
 class MapImageBloc {
   MapImageRepository _repository;
   StreamController _controller;

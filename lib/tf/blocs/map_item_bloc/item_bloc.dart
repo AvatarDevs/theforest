@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:theforest/tf/repositories/map_item_repository.dart';
 import './bloc.dart';
 
+///flutter_bloc implementation
 class ItemBloc extends Bloc<ItemEvent, ItemState> {
   MapItemRepository _repository;
 

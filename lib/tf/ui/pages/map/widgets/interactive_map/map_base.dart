@@ -32,7 +32,6 @@ class _PannableMapBaseState extends State<PannableMapBase> {
   Offset tappedOffset;
   List<List<MapItemModel>> models;
   List<List<RRect>> rectList = [[], [], []];
-  final MapItemBloc _itemBloc = MapItemBloc();
   final ItemBloc _libItemBLoc = ItemBloc();
   MapImageBloc _imageBloc;
   @override
@@ -45,7 +44,6 @@ class _PannableMapBaseState extends State<PannableMapBase> {
 
   @override
   Widget build(BuildContext context) {
-    print("building");
     return Consumer<MapActivityViewModel>(
       child: StreamBuilder(
         stream: _imageBloc.stream,
@@ -56,7 +54,6 @@ class _PannableMapBaseState extends State<PannableMapBase> {
               return CircularProgressIndicator();
               break;
             case ResponseStatus.COMPLETED:
-              print("building image");
               return CustomPaint(
                 painter: PhotoPainter(s.data.data),
               );
@@ -75,13 +72,13 @@ class _PannableMapBaseState extends State<PannableMapBase> {
           height: 4096,
           child: LayoutBuilder(builder: (c, constraints) {
             final Size size = Size(constraints.maxWidth, constraints.maxHeight);
-            print("building2");
 
             return GestureTransformable(
               size: size,
               child: Stack(
                 children: [
                   child,
+                  //bloc library experiment
                   BlocBuilder(
                     bloc: _libItemBLoc,
                     builder: (context, ItemState state) {
@@ -129,7 +126,7 @@ class _PannableMapBaseState extends State<PannableMapBase> {
   @override
   void dispose() {
     // TODO: implement dispose
-    _itemBloc.dispose();
+
     _imageBloc.dispose();
     _libItemBLoc.close();
     super.dispose();
