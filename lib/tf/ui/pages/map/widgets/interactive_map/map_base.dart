@@ -20,9 +20,8 @@ import 'package:theforest/tf/ui/pages/map/widgets/interactive_map/item_view/item
 import 'package:theforest/tf/viewmodels/map_activity_vm.dart';
 
 class PannableMapBase extends StatefulWidget {
-  final Function callback;
-
-  const PannableMapBase({Key key, this.callback}) : super(key: key);
+  
+  const PannableMapBase({Key key, }) : super(key: key);
 
   @override
   _PannableMapBaseState createState() => _PannableMapBaseState();

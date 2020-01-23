@@ -1,10 +1,12 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:theforest/tf/data/api_response.dart';
 import 'package:theforest/tf/repositories/map_item_repository.dart';
 
-class MapItemBloc {
+///basic no library implementation of a bloc
+class MapItemBloc  {
+  
   MapItemRepository _repository;
   StreamController _controller;
 
@@ -12,6 +14,7 @@ class MapItemBloc {
     _repository = MapItemRepository();
     _controller = StreamController<Response<dynamic>>();
     fetchMapItems();
+    
   }
 
 //TODO add types to streams
